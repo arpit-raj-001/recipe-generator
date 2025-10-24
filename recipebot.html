@@ -398,8 +398,9 @@
 
         const startTime = performance.now();
 
-        try{
-          const res = await fetch("/generate-recipe", {
+        const BASE_URL = "https://recipe-generator-bdqi.onrender.com";
+
+const res = await fetch(`${BASE_URL}/generate-recipe`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
