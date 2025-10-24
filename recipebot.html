@@ -398,15 +398,16 @@
 
         const startTime = performance.now();
 
-        try {
-          const res = await fetch("http://127.0.0.1:5000/generate-recipe", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              dish_name: dish,
-              model: selectedModel,
-            }),
-          });
+        try{
+          const res = await fetch("/generate-recipe", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    dish_name: dish,
+    model: selectedModel,
+  }),
+});
+
 
           const data = await res.json();
           const endTime = performance.now();
