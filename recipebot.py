@@ -150,4 +150,5 @@ if __name__ == '__main__':
     print(f"✅ HuggingFace Model: {'Available' if hf_token else 'NOT CONFIGURED'}")
     print(f"✅ Groq Model: {'Available' if groq_token else 'NOT CONFIGURED'}")
     print("="*60 + "\n")
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
