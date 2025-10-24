@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🍳 AI Recipe Generator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 800px;
+        width: 100%;
+        padding: 40px;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+      }
+      .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 1.1em;
+      }
+
+      .model-selector {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .model-option {
+        flex: 1;
+        min-width: 200px;
+        padding: 15px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        background: white;
+      }
+
+      .model-option:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+      }
+
+      .model-option.active {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .model-option .model-name {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 5px;
+      }
+
+      .model-option .model-desc {
+        font-size: 0.85em;
+        opacity: 0.8;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      #dishInput {
+        flex: 1;
+        padding: 15px 20px;
+        font-size: 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+
+      #dishInput:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      #generateBtn {
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      #generateBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      #generateBtn:active {
+        transform: translateY(0);
+      }
+      #generateBtn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .loading-container {
+        display: none;
+        text-align: center;
+        margin: 30px 0;
+      }
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .loading-text {
+        color: #667eea;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+
+      .stats-container {
+        display: none;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      .stats-container .stats-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+        margin-bottom: 5px;
+      }
+
+      .stats-container .stats-value {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .output-container {
+        display: none;
+        margin-top: 30px;
+      }
+      #output {
+        background: #f8f9fa;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 25px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 600px;
+        overflow-y: auto;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .btn {
+        flex: 1;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      #copyBtn {
+        background: #28a745;
+        color: white;
+      }
+      #copyBtn:hover {
+        background: #218838;
+        transform: translateY(-2px);
+      }
+      #clearBtn {
+        background: #dc3545;
+        color: white;
+      }
+      #clearBtn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+      }
+
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #f5c6cb;
+        margin-top: 20px;
+      }
+
+      .examples {
+        text-align: center;
+        margin-top: 20px;
+        color: #666;
+        font-size: 0.9em;
+      }
+      .example-tag {
+        display: inline-block;
+        background: #e9ecef;
+        padding: 5px 12px;
+        border-radius: 15px;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .example-tag:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+        h1 {
+          font-size: 2em;
+        }
+        .input-group {
+          flex-direction: column;
+        }
+        .button-group {
+          flex-direction: column;
+        }
+        .model-selector {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🍳 Recipe Generator</h1>
+      <p class="subtitle">Choose your AI model and get recipes instantly!</p>
+
+      <div class="model-selector">
+        <div class="model-option active" data-model="huggingface">
+          <div class="model-name">🤗 HuggingFace SmolLM</div>
+          <div class="model-desc">Fast & Free</div>
+        </div>
+        <div class="model-option" data-model="groq">
+          <div class="model-name">⚡ Groq GPT-OSS</div>
+          <div class="model-desc">Ultra Fast</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input
+          type="text"
+          id="dishInput"
+          placeholder="Enter a dish name (e.g., Chicken Tikka, Pasta Carbonara)"
+          autocomplete="off"
+        />
+        <button id="generateBtn">Generate Recipe</button>
+      </div>
+
+      <div class="examples">
+        <strong>Try these:</strong>
+        <span class="example-tag" data-dish="Chicken Tikka"
+          >🍗 Chicken Tikka</span
+        >
+        <span class="example-tag" data-dish="Red Sauce Pasta"
+          >🍝 Red Sauce Pasta</span
+        >
+        <span class="example-tag" data-dish="Chocolate Cake"
+          >🍰 Chocolate Cake</span
+        >
+        <span class="example-tag" data-dish="Chowmin">🥡 Chowmin</span>
+      </div>
+
+      <div id="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Generating your recipe...</div>
+      </div>
+
+      <div id="statsContainer" class="stats-container">
+        <div class="stats-label">⚡ Generation Time</div>
+        <div class="stats-value" id="statsValue">0.00s</div>
+      </div>
+
+      <div id="outputContainer" class="output-container">
+        <pre id="output"></pre>
+        <div class="button-group">
+          <button id="copyBtn" class="btn">📋 Copy to Clipboard</button>
+          <button id="clearBtn" class="btn">🗑️ Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const generateBtn = document.getElementById("generateBtn");
+      const dishInput = document.getElementById("dishInput");
+      const output = document.getElementById("output");
+      const loading = document.getElementById("loading");
+      const outputContainer = document.getElementById("outputContainer");
+      const statsContainer = document.getElementById("statsContainer");
+      const statsValue = document.getElementById("statsValue");
+      const copyBtn = document.getElementById("copyBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const exampleTags = document.querySelectorAll(".example-tag");
+      const modelOptions = document.querySelectorAll(".model-option");
+
+      let selectedModel = "huggingface";
+
+      modelOptions.forEach((option) => {
+        option.addEventListener("click", () => {
+          modelOptions.forEach((opt) => opt.classList.remove("active"));
+          option.classList.add("active");
+          selectedModel = option.dataset.model;
+        });
+      });
+
+      exampleTags.forEach((tag) => {
+        tag.addEventListener("click", () => {
+          dishInput.value = tag.dataset.dish;
+          generateBtn.click();
+        });
+      });
+
+      async function generateRecipe() {
+        const dish = dishInput.value.trim();
+        if (!dish) {
+          showError("Please enter a dish name!");
+          return;
+        }
+
+        loading.style.display = "block";
+        outputContainer.style.display = "none";
+        statsContainer.style.display = "none";
+        generateBtn.disabled = true;
+
+        const startTime = performance.now();
+
+        try {
+          const res = await fetch("http://127.0.0.1:5000/generate-recipe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              dish_name: dish,
+              model: selectedModel,
+            }),
+          });
+
+          const data = await res.json();
+          const endTime = performance.now();
+          const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+
+          if (data.error) {
+            showError("❌ " + data.error);
+            return;
+          }
+
+          let displayText =
+            data.recipe.ingredients && Array.isArray(data.recipe.ingredients)
+              ? formatRecipe(data.recipe)
+              : JSON.stringify(data.recipe, null, 2);
+
+          output.textContent = displayText;
+          outputContainer.style.display = "block";
+
+          statsValue.textContent = `${timeTaken}s`;
+          statsContainer.style.display = "block";
+        } catch (err) {
+          showError(
+            "Network Error: " +
+              err.message +
+              "\n\nMake sure the Flask server is running on port 5000."
+          );
+        } finally {
+          loading.style.display = "none";
+          generateBtn.disabled = false;
+        }
+      }
+
+      function formatRecipe(recipe) {
+        let text = `📝 ${recipe.name}\n${"=".repeat(60)}\n\n`;
+        if (recipe.description) text += `${recipe.description}\n\n`;
+        text += `⏱️ Prep Time: ${recipe.prep_time}\n🔥 Cook Time: ${recipe.cook_time}\n🍽️ Servings: ${recipe.servings}\n📊 Difficulty: ${recipe.difficulty}\n\n`;
+        text += "🥘 INGREDIENTS:\n" + "-".repeat(60) + "\n";
+        recipe.ingredients.forEach((i, idx) => (text += `${idx + 1}. ${i}\n`));
+        text += "\n👨‍🍳 INSTRUCTIONS:\n" + "-".repeat(60) + "\n";
+        recipe.instructions.forEach(
+          (i, idx) => (text += `${idx + 1}. ${i}\n\n`)
+        );
+        if (recipe.raw_response)
+          text +=
+            "\n" +
+            "=".repeat(60) +
+            "\n📋 RAW AI RESPONSE:\n" +
+            "-".repeat(60) +
+            "\n" +
+            recipe.raw_response +
+            "\n";
+        if (recipe.note) text += `\n⚠️ Note: ${recipe.note}\n`;
+        return text;
+      }
+
+      function showError(msg) {
+        output.innerHTML = `<div class="error-message">${msg}</div>`;
+        outputContainer.style.display = "block";
+        statsContainer.style.display = "none";
+      }
+
+      generateBtn.addEventListener("click", generateRecipe);
+      dishInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") generateRecipe();
+      });
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(output.textContent);
+        alert("✅ Copied to clipboard!");
+      });
+      clearBtn.addEventListener("click", () => {
+        outputContainer.style.display = "none";
+        statsContainer.style.display = "none";
+        dishInput.value = "";
+        dishInput.focus();
+      });
+    </script>
+  </body>
+</html>
