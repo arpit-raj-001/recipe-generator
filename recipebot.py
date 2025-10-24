@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
@@ -143,6 +143,10 @@ def health_check():
     })
 
 
+@app.route('/')
+def home():
+    return send_from_directory('.', 'recipebot.html')
+    
 if __name__ == '__main__':
     print("\n" + "="*60)
     print("🚀 Starting Flask Server with Multi-Model Support")
