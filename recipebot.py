@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from groq import Groq
@@ -114,6 +114,11 @@ def health_check():
         'hf_model': "HuggingFaceTB/SmolLM3-3B",
         'groq_model': "openai/gpt-oss-20b"
     })
+
+
+@app.route('/')
+def index():
+    return send_from_directory('static', 'index.html')
 
 if __name__ == '__main__':
     print("\n" + "="*60)
