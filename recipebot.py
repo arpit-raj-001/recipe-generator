@@ -120,20 +120,6 @@ Do not include any extra text, only the JSON object."""
         return jsonify({'error': str(e)}), 400
 
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify({
-        'status': 'healthy',
-        'hf_token_present': bool(hf_token),
-        'groq_token_present': bool(groq_token),
-        'models_available': {
-            'huggingface': bool(hf_token),
-            'groq': bool(groq_token)
-        },
-        'hf_model': "HuggingFaceTB/SmolLM3-3B",
-        'groq_model': "openai/gpt-oss-20b"
-    })
-
 
 @app.route('/')
 def home():
