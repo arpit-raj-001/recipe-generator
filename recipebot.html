@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🍳 AI Recipe Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AI Recipe Generator</title>
     <style>
       * {
         margin: 0;
@@ -12,7 +12,7 @@
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         display: flex;
@@ -28,10 +28,10 @@
         max-width: 800px;
         width: 100%;
         padding: 40px;
-        animation: fadeIn 0.5s ease-in;
+        animation: fadeinn 0.5s ease-in;
       }
 
-      @keyframes fadeIn {
+      @keyframes fadeinn {
         from {
           opacity: 0;
           transform: translateY(20px);
@@ -55,7 +55,7 @@
         font-size: 1.1em;
       }
 
-      .model-selector {
+      .modelselector {
         display: flex;
         gap: 10px;
         margin-bottom: 20px;
@@ -63,7 +63,7 @@
         flex-wrap: wrap;
       }
 
-      .model-option {
+      .modeloption {
         flex: 1;
         min-width: 200px;
         padding: 15px 20px;
@@ -75,30 +75,30 @@
         background: white;
       }
 
-      .model-option:hover {
+      .modeloption:hover {
         border-color: #667eea;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
       }
 
-      .model-option.active {
+      .modeloption.active {
         border-color: #667eea;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
       }
 
-      .model-option .model-name {
+      .modeloption .modelname {
         font-weight: bold;
         font-size: 1.1em;
         margin-bottom: 5px;
       }
 
-      .model-option .model-desc {
+      .modeloption .modeldesc {
         font-size: 0.85em;
         opacity: 0.8;
       }
 
-      .input-group {
+      .inputgroup {
         display: flex;
         gap: 10px;
         margin-bottom: 20px;
@@ -119,7 +119,7 @@
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
       }
 
-      #generateBtn {
+      #generatebutt {
         padding: 15px 30px;
         font-size: 16px;
         font-weight: bold;
@@ -131,25 +131,25 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
-      #generateBtn:hover {
+      #generatebutt:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
       }
-      #generateBtn:active {
+      #generatebutt:active {
         transform: translateY(0);
       }
-      #generateBtn:disabled {
+      #generatebutt:disabled {
         background: #ccc;
         cursor: not-allowed;
         transform: none;
       }
 
-      .loading-container {
+      .loadingcontainer {
         display: none;
         text-align: center;
         margin: 30px 0;
       }
-      .loading-spinner {
+      .loadingspinner {
         width: 50px;
         height: 50px;
         border: 4px solid #f3f3f3;
@@ -167,13 +167,13 @@
           transform: rotate(360deg);
         }
       }
-      .loading-text {
+      .loadingtext {
         color: #667eea;
         font-weight: bold;
         font-size: 1.1em;
       }
 
-      .stats-container {
+      .statscontainer {
         display: none;
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         color: white;
@@ -184,18 +184,18 @@
         animation: fadeIn 0.5s ease-in;
       }
 
-      .stats-container .stats-label {
+      .statscontainer .statslabel {
         font-size: 0.9em;
         opacity: 0.9;
         margin-bottom: 5px;
       }
 
-      .stats-container .stats-value {
+      .statscontainer .statsvalue {
         font-size: 1.5em;
         font-weight: bold;
       }
 
-      .output-container {
+      .outputcontainer {
         display: none;
         margin-top: 30px;
       }
@@ -213,12 +213,12 @@
         line-height: 1.6;
       }
 
-      .button-group {
+      .buttongroup {
         display: flex;
         gap: 10px;
         margin-top: 15px;
       }
-      .btn {
+      .butt {
         flex: 1;
         padding: 12px 20px;
         font-size: 14px;
@@ -229,24 +229,24 @@
         transition: all 0.2s ease;
       }
 
-      #copyBtn {
+      #copybutt {
         background: #28a745;
         color: white;
       }
-      #copyBtn:hover {
+      #copybutt:hover {
         background: #218838;
         transform: translateY(-2px);
       }
-      #clearBtn {
+      #clearbutt {
         background: #dc3545;
         color: white;
       }
-      #clearBtn:hover {
+      #clearbutt:hover {
         background: #c82333;
         transform: translateY(-2px);
       }
 
-      .error-message {
+      .errormessage {
         background: #f8d7da;
         color: #721c24;
         padding: 15px;
@@ -261,7 +261,7 @@
         color: #666;
         font-size: 0.9em;
       }
-      .example-tag {
+      .exampletag {
         display: inline-block;
         background: #e9ecef;
         padding: 5px 12px;
@@ -270,7 +270,7 @@
         cursor: pointer;
         transition: all 0.2s ease;
       }
-      .example-tag:hover {
+      .exampletag:hover {
         background: #667eea;
         color: white;
         transform: translateY(-2px);
@@ -297,77 +297,77 @@
   </head>
   <body>
     <div class="container">
-      <h1>🍳 Recipe Generator</h1>
-      <p class="subtitle">Choose your AI model and get recipes instantly!</p>
+      <h1> Recipe Generator</h1>
+      <p class="subtitle">Choose your AI model and get recipes</p>
 
-      <div class="model-selector">
-        <div class="model-option active" data-model="huggingface">
-          <div class="model-name">🤗 HuggingFace SmolLM</div>
-          <div class="model-desc">Fast & Free</div>
+      <div class="modelselector">
+        <div class="modeloption" data-model="huggingface">
+          <div class="modelname">🤗 Huggingface SmolLM</div>
+          <div class="modeldesc">Fast & Free</div>
         </div>
-        <div class="model-option" data-model="groq">
-          <div class="model-name">⚡ Groq GPT-OSS</div>
-          <div class="model-desc">Ultra Fast</div>
+        <div class="modeloption active" data-model="groq">
+          <div class="modelname">⚡ Groq gpt</div>
+          <div class="modeldesc">Ultra fast</div>
         </div>
       </div>
 
-      <div class="input-group">
+      <div class="inputgroup">
         <input
           type="text"
           id="dishInput"
           placeholder="Enter a dish name (e.g., Chicken Tikka, Pasta Carbonara)"
           autocomplete="off"
-        />
-        <button id="generateBtn">Generate Recipe</button>
+        >
+        <button id="generateButt">Generate Recipe</button>
       </div>
 
       <div class="examples">
         <strong>Try these:</strong>
-        <span class="example-tag" data-dish="Chicken Tikka"
+        <span class="exampletag" data-dish="Chicken tikka"
           >🍗 Chicken Tikka</span
         >
-        <span class="example-tag" data-dish="Red Sauce Pasta"
+        <span class="exampletag" data-dish="Red sauce pasta"
           >🍝 Red Sauce Pasta</span
         >
-        <span class="example-tag" data-dish="Chocolate Cake"
+        <span class="exampletag" data-dish="Chocolate cake"
           >🍰 Chocolate Cake</span
         >
-        <span class="example-tag" data-dish="Chowmin">🥡 Chowmin</span>
+        <span class="exampletag" data-dish="Chowmin">🥡 Chowmin</span>
       </div>
 
-      <div id="loading" class="loading-container">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Generating your recipe...</div>
+      <div id="loading" class="loadingcontainer">
+        <div class="loadingspinner"></div>
+        <div class="loadingtext">Generating your recipe...</div>
       </div>
 
-      <div id="statsContainer" class="stats-container">
-        <div class="stats-label">⚡ Generation Time</div>
-        <div class="stats-value" id="statsValue">0.00s</div>
+      <div id="statsContainer" class="statscontainer">
+        <div class="statslabel">⚡ Generation Time</div>
+        <div class="statsvalue" id="statsValue">0.00s</div>
       </div>
 
-      <div id="outputContainer" class="output-container">
+      <div id="outputContainer" class="outputcontainer">
         <pre id="output"></pre>
-        <div class="button-group">
-          <button id="copyBtn" class="btn">📋 Copy to Clipboard</button>
-          <button id="clearBtn" class="btn">🗑️ Clear</button>
+        <div class="buttongroup">
+          <button id="copybutt" class="butt">📋 Copy to Clipboard</button>
+          <button id="clearbutt" class="butt">🗑️ Clear</button>
         </div>
       </div>
     </div>
 
     <script>
-      const generateBtn = document.getElementById("generateBtn");
+      const generatebutt = document.getElementById("generatebutt");
       const dishInput = document.getElementById("dishInput");
       const output = document.getElementById("output");
       const loading = document.getElementById("loading");
       const outputContainer = document.getElementById("outputContainer");
       const statsContainer = document.getElementById("statsContainer");
       const statsValue = document.getElementById("statsValue");
-      const copyBtn = document.getElementById("copyBtn");
-      const clearBtn = document.getElementById("clearBtn");
-      const exampleTags = document.querySelectorAll(".example-tag");
-      const modelOptions = document.querySelectorAll(".model-option");
+      const copybutt = document.getElementById("copybutt");
+      const clearbutt = document.getElementById("clearbutt");
+      const exampleTags = document.querySelectorAll(".exampletag");
+      const modelOptions = document.querySelectorAll(".modeloption");
 
-      let selectedModel = "huggingface";
+      let selectedModel = "groq";
 
       modelOptions.forEach((option) => {
         option.addEventListener("click", () => {
@@ -380,7 +380,7 @@
       exampleTags.forEach((tag) => {
         tag.addEventListener("click", () => {
           dishInput.value = tag.dataset.dish;
-          generateBtn.click();
+          generatebutt.click();
         });
       });
 
@@ -394,7 +394,7 @@
         loading.style.display = "block";
         outputContainer.style.display = "none";
         statsContainer.style.display = "none";
-        generateBtn.disabled = true;
+        generatebutt.disabled = true;
 
         const startTime = performance.now();
 
@@ -432,7 +432,7 @@
           showError(
             "Network Error: " +
               err.message +
-              "\n\nMake sure the Flask server is running on port 5000."
+              "\n\nMake sure the Flask server is running "
           );
         } finally {
           loading.style.display = "none";
@@ -440,8 +440,8 @@
         }
       }
 
-      function formatRecipe(recipe) {
-        let text = `📝 ${recipe.name}\n${"=".repeat(60)}\n\n`;
+      function formatRecipe(recipe) {  //i have generated this format using llms
+        let text = `📝 ${recipe.name}\n${"__".repeat(40)}\n\n`;
         if (recipe.description) text += `${recipe.description}\n\n`;
         text += `⏱️ Prep Time: ${recipe.prep_time}\n🔥 Cook Time: ${recipe.cook_time}\n🍽️ Servings: ${recipe.servings}\n📊 Difficulty: ${recipe.difficulty}\n\n`;
         text += "🥘 INGREDIENTS:\n" + "-".repeat(60) + "\n";
@@ -464,20 +464,20 @@
       }
 
       function showError(msg) {
-        output.innerHTML = `<div class="error-message">${msg}</div>`;
+        output.innerHTML = `<div class="errormessage">${msg}</div>`;
         outputContainer.style.display = "block";
         statsContainer.style.display = "none";
       }
 
-      generateBtn.addEventListener("click", generateRecipe);
+      generatebutt.addEventListener("click", generateRecipe);
       dishInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") generateRecipe();
       });
-      copyBtn.addEventListener("click", () => {
+      copybutt.addEventListener("click", () => {
         navigator.clipboard.writeText(output.textContent);
         alert("✅ Copied to clipboard!");
       });
-      clearBtn.addEventListener("click", () => {
+      clearbutt.addEventListener("click", () => {
         outputContainer.style.display = "none";
         statsContainer.style.display = "none";
         dishInput.value = "";
